@@ -42,8 +42,17 @@ function rename_files_to_dir {
         file_name_to_language_code $file_name
         language_code=$( file_name_to_language_code "$file_name")
         echo "Language code: $language_code"
-        file_renamed="${directory_name}.${language_code}.${file_ext_arg}"
+        directory_name_new_file=${single_file%/*/*/*}
+        file_renamed="${directory_name_new_file}/${directory_name}.${language_code}.${file_ext_arg}"
+
+        # TODO handle default sub and multiple subs for same language.
+
+
+        
+
         echo "New file name: $file_renamed"
+        cmd="mv $single_file $file_renamed"
+        echo "Command: ${cmd}"
     done
 }
 
