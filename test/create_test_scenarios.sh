@@ -45,3 +45,9 @@ test_sub_sub_folders_number=8
 test_language_names=("1_English" "12_English" "3_Italian" "4_French" "20_Spanish" "7_German")
 
 create_scenario "$test_root_folder" "$test_sub_folder" "$test_scenario_number" "$test_sub_sub_folders_base_name" "$test_sub_sub_folders_number" "$test_file_extension" "${test_language_names[@]}"
+
+test_scenario_number=2
+test_sub_sub_folders_number=3
+test_language_names=("1_English" "12_English" "30_Italian" "25_Italian" "20_Chinese" "7_Korean")
+
+create_scenario "$test_root_folder" "$test_sub_folder" "$test_scenario_number" "$test_sub_sub_folders_base_name" "$test_sub_sub_folders_number" "$test_file_extension" "${test_language_names[@]}"
