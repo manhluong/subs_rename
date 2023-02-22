@@ -9,6 +9,8 @@ language_codes_arg=0
 default_language_code_flag=0
 default_language_code_arg=0
 
+files_created_list=""
+
 function print_help {
     echo 'Parameters and flags:'
     echo '   [Mandatory] -s Starting directory - Ex.: /absolute-path/dir/another_dir'
@@ -46,25 +48,39 @@ function rename_files_to_dir {
         language_code=$( file_name_to_language_code "$file_name")
         echo "Language code: $language_code"
         directory_name_new_file=${single_file%/*/*/*}
-        file_renamed="${directory_name_new_file}/${directory_name}.${language_code}.${file_ext_arg}"
+        file_renamed=""
+        default_created=0
 
         # Check default language.
-        if [[ $language_code -eq $default_language_code_arg ]]
+        if [[ $language_code == $default_language_code_arg ]]
         then
            file_renamed_default="${directory_name_new_file}/${directory_name}.default.${language_code}.${file_ext_arg}"
            if [[ ! -f "$file_renamed_default" ]]
            then
               echo "Default $language_code does not exists."
+              default_created=1
               file_renamed="$file_renamed_default"
            fi
         fi
 
         # Handle multiple subs for same language.
-        
+        if [[ $default_created -eq 0 ]] # If the default language file is created, then skips, as we have only 1 default language.
+        then
+           file_renamed="${directory_name_new_file}/${directory_name}.${language_code}"
+           file_renamed_to_check="${file_renamed}.${file_ext_arg}" # Start checking 1 language code.
+           while [ -f "$file_renamed_to_check" ]
+           do
+              file_renamed="${file_renamed}.${language_code}" # If file exits, keep adding language codes: en.en.en.fileextension
+              file_renamed_to_check="${file_renamed}.${file_ext_arg}"
+           done
+           file_renamed="$file_renamed_to_check"
+        fi
 
         echo "New file name: $file_renamed"
         cmd="mv $single_file $file_renamed"
         echo "Command: ${cmd}"
+        eval "$cmd"
+        files_created_list="${files_created_list}${file_renamed}\n"
     done
 }
 
@@ -72,6 +88,7 @@ function file_name_to_language_code {
     file_name="$1"
     file_name_language=$(echo ${file_name} | cut -d'_' -f 2 )
     echo >&2 "File name language: $file_name_language"
+    echo >&2 "File name code:"
     for single_code in ${language_codes_arg[@]};
     do
         #echo >&2 "$file_name_language <> $single_code"
@@ -120,6 +137,8 @@ else
    echo >&2 "Starting directory: $starting_directory_arg"
    echo >&2 "File type: $file_ext_arg"
    echo >&2 "Language codes: ${language_codes_arg[@]}"
+   echo >&2 "Default language code: $default_language_code_arg"
    rename_files_to_dir $( get_files_by_ext "$starting_directory_arg" "$file_ext_arg")
+   echo "Files created:\n${files_created_list}"
    exit 0
 fi
