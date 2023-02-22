@@ -67,10 +67,10 @@ function rename_files_to_dir {
         if [[ $default_created -eq 0 ]] # If the default language file is created, then skips, as we have only 1 default language.
         then
            file_renamed="${directory_name_new_file}/${directory_name}.${language_code}"
-           file_renamed_to_check="${file_renamed}.${file_ext_arg}"
+           file_renamed_to_check="${file_renamed}.${file_ext_arg}" # Start checking 1 language code.
            while [ -f "$file_renamed_to_check" ]
            do
-              file_renamed="${file_renamed}.${language_code}"
+              file_renamed="${file_renamed}.${language_code}" # If file exits, keep adding language codes: en.en.en.fileextension
               file_renamed_to_check="${file_renamed}.${file_ext_arg}"
            done
            file_renamed="$file_renamed_to_check"
