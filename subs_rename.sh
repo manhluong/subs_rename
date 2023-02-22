@@ -10,6 +10,7 @@ default_language_code_flag=0
 default_language_code_arg=0
 
 files_created_list=""
+files_skipped_list=""
 
 function print_help {
     echo 'Parameters and flags:'
@@ -43,9 +44,15 @@ function rename_files_to_dir {
         file_name_with_ext="$(basename -- $single_file)"
         file_name=$(echo ${file_name_with_ext} | grep -o '^[^\.]*')
         echo "File name: $file_name"
-        file_name_to_language_code $file_name
         language_code=$(file_name_to_language_code "$file_name")
         echo "Language code: $language_code"
+
+        if [[ -z "$language_code" ]]; then
+            echo "No language code found. Skipping $single_file"
+            files_skipped_list="${files_skipped_list}$single_file\n"
+            continue
+        fi
+
         directory_name_new_file=${single_file%/*/*/*}
         file_renamed=""
         default_created=0
@@ -83,7 +90,6 @@ function file_name_to_language_code {
     file_name="$1"
     file_name_language=$(echo ${file_name} | cut -d'_' -f 2)
     echo >&2 "File name language: $file_name_language"
-    echo >&2 "File name code:"
     for single_code in ${language_codes_arg[@]}; do
         #echo >&2 "$file_name_language <> $single_code"
         if [[ "$single_code" == *"$file_name_language"* ]]; then # ref.: https://linuxize.com/post/how-to-check-if-string-contains-substring-in-bash/
@@ -131,5 +137,6 @@ else
     echo >&2 "Default language code: $default_language_code_arg"
     rename_files_to_dir $(get_files_by_ext "$starting_directory_arg" "$file_ext_arg")
     echo "Files created:\n${files_created_list}"
+    echo "Files skipped:\n${files_skipped_list}"
     exit 0
 fi
