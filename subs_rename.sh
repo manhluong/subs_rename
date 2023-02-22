@@ -6,12 +6,15 @@ file_ext_flag=0
 file_ext_arg=0
 language_codes_flag=0
 language_codes_arg=0
+default_language_code_flag=0
+default_language_code_arg=0
 
 function print_help {
     echo 'Parameters and flags:'
-    echo '   [Mandatory] -d Starting directory - Ex.: ../dir/another_dir'
+    echo '   [Mandatory] -s Starting directory - Ex.: /absolute-path/dir/another_dir'
     echo '   [Mandatory] -t File extension / type - Ex.: srt'
     echo '   [Mandatory] -c Language codes - Ex.: "Italian-it italian-it English-en english-en French-fr french-fr"'
+    echo '   [Mandatory] -d Default language code - Ex.: "en"'
 }
 
 function print_help_exit {
@@ -45,9 +48,18 @@ function rename_files_to_dir {
         directory_name_new_file=${single_file%/*/*/*}
         file_renamed="${directory_name_new_file}/${directory_name}.${language_code}.${file_ext_arg}"
 
-        # TODO handle default sub and multiple subs for same language.
+        # Check default language.
+        if [[ $language_code -eq $default_language_code_arg ]]
+        then
+           file_renamed_default="${directory_name_new_file}/${directory_name}.default.${language_code}.${file_ext_arg}"
+           if [[ ! -f "$file_renamed_default" ]]
+           then
+              echo "Default $language_code does not exists."
+              file_renamed="$file_renamed_default"
+           fi
+        fi
 
-
+        # Handle multiple subs for same language.
         
 
         echo "New file name: $file_renamed"
@@ -63,7 +75,8 @@ function file_name_to_language_code {
     for single_code in ${language_codes_arg[@]};
     do
         #echo >&2 "$file_name_language <> $single_code"
-        if [[ "$single_code" == *"$file_name_language"* ]]; then # ref.: https://linuxize.com/post/how-to-check-if-string-contains-substring-in-bash/
+        if [[ "$single_code" == *"$file_name_language"* ]] # ref.: https://linuxize.com/post/how-to-check-if-string-contains-substring-in-bash/
+        then
            language_code=$(echo ${single_code} | cut -d'-' -f 2 )
            retval=${language_code}
            echo "$retval"
@@ -75,10 +88,10 @@ if [[ $# -eq 0 ]] ; then
     print_help_exit
 fi
 
-while getopts d:t:c: flag
+while getopts s:t:c:d: flag
 do
     case "${flag}" in
-        d)
+        s)
            starting_directory_flag=1
            starting_directory_arg=${OPTARG}
         ;;
@@ -90,13 +103,17 @@ do
            language_codes_flag=1
            language_codes_arg=$OPTARG
         ;;
+        d)
+           default_language_code_flag=1
+           default_language_code_arg=$OPTARG
+        ;;
         *)
            print_help_exit
         ;;
     esac
 done
 
-if [ $starting_directory_flag -eq 0 ] || [ $file_ext_flag -eq 0 ] || [ $language_codes_flag -eq 0 ]
+if [ $starting_directory_flag -eq 0 ] || [ $file_ext_flag -eq 0 ] || [ $language_codes_flag -eq 0 ] || [ $default_language_code_flag -eq 0 ]
 then
    print_help_exit
 else
