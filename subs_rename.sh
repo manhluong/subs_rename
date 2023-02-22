@@ -137,7 +137,7 @@ else
    echo >&2 "Starting directory: $starting_directory_arg"
    echo >&2 "File type: $file_ext_arg"
    echo >&2 "Language codes: ${language_codes_arg[@]}"
-   echo >&2 "Defauilt language code: $default_language_code_arg"
+   echo >&2 "Default language code: $default_language_code_arg"
    rename_files_to_dir $( get_files_by_ext "$starting_directory_arg" "$file_ext_arg")
    echo "Files created:\n${files_created_list}"
    exit 0
