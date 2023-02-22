@@ -19,19 +19,17 @@ function create_scenario {
     shift 6
     language_names=("$@")
 
-    for (( c=1; c<=$sub_sub_folders_number; c++ ))
-    do
-       new_sub_sub_folder="${sub_folder}/${sub_sub_folders_base_name}_$c"
-       cmd="mkdir $new_sub_sub_folder"
-       echo "Command: ${cmd}"
-       eval "$cmd"
-       for m in "${language_names[@]}"
-       do
-          new_file_language="${new_sub_sub_folder}/${m}.${file_extension}"
-          cmd="touch $new_file_language"
-          echo "Command: ${cmd}"
-          eval "$cmd"
-       done
+    for ((c = 1; c <= $sub_sub_folders_number; c++)); do
+        new_sub_sub_folder="${sub_folder}/${sub_sub_folders_base_name}_$c"
+        cmd="mkdir $new_sub_sub_folder"
+        echo "Command: ${cmd}"
+        eval "$cmd"
+        for m in "${language_names[@]}"; do
+            new_file_language="${new_sub_sub_folder}/${m}.${file_extension}"
+            cmd="touch $new_file_language"
+            echo "Command: ${cmd}"
+            eval "$cmd"
+        done
     done
 }
 
