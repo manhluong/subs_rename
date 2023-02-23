@@ -39,7 +39,7 @@ The renaming will move all subtitles files to the folder containing the video fi
 
 To run the script, you will need to pass some parameters.
 
-Pass no parameters to show the usage messsage with the parameters' list.
+Pass no parameters to show the usage message with the parameters' list.
 
 To see some examples, check the script that runs the test scenarios inside the `test` folder.
 
@@ -50,3 +50,9 @@ Inside the `test` folder you will find some e2e test harness in place.
 Is not perfect but it can cover some scenarios.
 
 First create the scenarios, with one script then run the tests with the other script.
+
+## Code style
+
+The formatting is done via the `shell-format` plugin of vscode:
+
+https://marketplace.visualstudio.com/items?itemName=foxundermoon.shell-format
