@@ -19,18 +19,28 @@ function create_scenario {
     shift 6
     language_names=("$@")
 
-    for ((c = 1; c <= $sub_sub_folders_number; c++)); do
-        new_sub_sub_folder="${sub_folder}/${sub_sub_folders_base_name}_$c"
-        cmd="mkdir $new_sub_sub_folder"
-        echo "Command: ${cmd}"
-        eval "$cmd"
+    if [[ $sub_sub_folders_number -eq 0 ]]; then
         for m in "${language_names[@]}"; do
-            new_file_language="${new_sub_sub_folder}/${m}.${file_extension}"
+            new_file_language="${sub_folder}/${m}.${file_extension}"
             cmd="touch $new_file_language"
             echo "Command: ${cmd}"
             eval "$cmd"
         done
-    done
+    else
+        for ((c = 1; c <= $sub_sub_folders_number; c++)); do
+            new_sub_sub_folder="${sub_folder}/${sub_sub_folders_base_name}_$c"
+            cmd="mkdir $new_sub_sub_folder"
+            echo "Command: ${cmd}"
+            eval "$cmd"
+            for m in "${language_names[@]}"; do
+                new_file_language="${new_sub_sub_folder}/${m}.${file_extension}"
+                cmd="touch $new_file_language"
+                echo "Command: ${cmd}"
+                eval "$cmd"
+            done
+        done
+    fi
+
 }
 
 # Common test scenarios variables
@@ -48,6 +58,13 @@ create_scenario "$test_root_folder" "$test_sub_folder" "$test_scenario_number" "
 
 test_scenario_number=2
 test_sub_sub_folders_number=3
+test_language_names=("1_English" "12_English" "30_Italian" "25_Italian" "20_Chinese" "7_Korean")
+
+create_scenario "$test_root_folder" "$test_sub_folder" "$test_scenario_number" "$test_sub_sub_folders_base_name" "$test_sub_sub_folders_number" "$test_file_extension" "${test_language_names[@]}"
+
+# This scenario is like for a movie with no episodes.
+test_scenario_number=3
+test_sub_sub_folders_number=0
 test_language_names=("1_English" "12_English" "30_Italian" "25_Italian" "20_Chinese" "7_Korean")
 
 create_scenario "$test_root_folder" "$test_sub_folder" "$test_scenario_number" "$test_sub_sub_folders_base_name" "$test_sub_sub_folders_number" "$test_file_extension" "${test_language_names[@]}"
