@@ -1,11 +1,11 @@
 # Subs Renamer
 
-This script is to rename subtitles files that are in the format that you can find with rarbg torrents.
+This script is to rename subtitles files that are in the format that you can find on rarbg torrents tracker.
 
-The format is:
+The directory structure can be:
 
-Serie folder
-
+```
+Multi video folder
 - Video 1
 - Video 2
 - Video 3
@@ -22,16 +22,18 @@ Serie folder
 - - - Subtitle file 2
 - - - Subtitle file 3
 - - - Subtitle file 4
+```
 
 Or:
 
-Movie folder
-
+```
+Single video folder
 - Video
 - Subs folder
 - - Subtitle file 1
 - - Subtitle file 2
 - - Subtitle file 3
+```
 
 The renaming will move all subtitles files to the folder containing the video file and will rename them with language code and with default.
 
@@ -42,6 +44,14 @@ To run the script, you will need to pass some parameters.
 Pass no parameters to show the usage message with the parameters' list.
 
 To see some examples, check the script that runs the test scenarios inside the `test` folder.
+
+Given the two above possible folders structure, usages are typically one of these two:
+
+`sh subs_rename.sh -s /path/to/single_movie_folder -t srt -c "Italian-it English-en" -d en -l 1`
+
+or
+
+`sh subs_rename.sh -s /path/to/multi_video_folder -t srt -c "Italian-it English-en" -d en -l 2`
 
 ## Test
 
