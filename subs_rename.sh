@@ -14,7 +14,7 @@ default_folder_levels_arg=0
 files_created_list=""
 files_skipped_list=""
 
-function print_help {
+print_help() {
     echo 'Parameters and flags:'
     echo '   [Mandatory] -s Starting directory - Ex.: /absolute-path/dir/another_dir'
     echo '   [Mandatory] -t File extension / type - Ex.: srt'
@@ -23,12 +23,12 @@ function print_help {
     echo '   [Mandatory] -l Folder levels to move the new file to - "1" or "2"'
 }
 
-function print_help_exit {
+print_help_exit() {
     print_help
     exit 1
 }
 
-function get_files_by_ext {
+get_files_by_ext() {
     starting_directory="$1"
     file_type="$2"
     cmd="find $starting_directory -name '*.$file_type' -type f"
@@ -39,7 +39,7 @@ function get_files_by_ext {
     echo "$retval"
 }
 
-function rename_files_to_dir {
+rename_files_to_dir() {
     files_list="$@"
     for single_file in $files_list; do
         directory_name=$(basename ${single_file%/*})
@@ -92,7 +92,7 @@ function rename_files_to_dir {
     done
 }
 
-function file_name_to_language_code {
+file_name_to_language_code() {
     file_name="$1"
     file_name_language=$(echo ${file_name} | cut -d'_' -f 2)
     echo >&2 "File name language: $file_name_language"
