@@ -47,7 +47,7 @@ To see some examples, check the script that runs the test scenarios inside the `
 
 Given the two above possible folders structure, usages are typically one of these two:
 
-`sh subs_rename.sh -s /path/to/single_movie_folder -t srt -c "Italian-it English-en" -d en -l 1`
+`sh subs_rename.sh -s /path/to/single_video_folder -t srt -c "Italian-it English-en" -d en -l 1`
 
 or
 
