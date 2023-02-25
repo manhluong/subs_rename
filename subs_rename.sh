@@ -57,15 +57,17 @@ rename_files_to_dir() {
         fi
 
         directory_name_new_file=${single_file%/*/*}
+        basename_new_file="$(basename $directory_name_new_file)"
         if [[ $default_folder_levels_arg -eq 2 ]]; then
             directory_name_new_file=${single_file%/*/*/*}
+            basename_new_file="$(basename $directory_name)"
         fi
         file_renamed=""
         default_created=0
 
         # Check default language.
         if [[ $language_code == $default_language_code_arg ]]; then
-            file_renamed_default="${directory_name_new_file}/${directory_name}.default.${language_code}.${file_ext_arg}"
+            file_renamed_default="${directory_name_new_file}/${basename_new_file}.default.${language_code}.${file_ext_arg}"
             if [[ ! -f "$file_renamed_default" ]]; then
                 echo "Default $language_code does not exists."
                 default_created=1
@@ -75,7 +77,7 @@ rename_files_to_dir() {
 
         # Handle multiple subs for same language.
         if [[ $default_created -eq 0 ]]; then # If the default language file is created, then skips, as we have only 1 default language.
-            file_renamed="${directory_name_new_file}/${directory_name}.${language_code}"
+            file_renamed="${directory_name_new_file}/${basename_new_file}.${language_code}"
             file_renamed_to_check="${file_renamed}.${file_ext_arg}" # Start checking 1 language code.
             while [ -f "$file_renamed_to_check" ]; do
                 file_renamed="${file_renamed}.${language_code}" # If file exits, keep adding language codes: en.en.en.fileextension
