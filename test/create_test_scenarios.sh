@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function create_scenario {
+create_scenario() {
     sub_folder="$2"
     scenario_number="$3"
     root_folder="$1_${scenario_number}"
