@@ -149,6 +149,7 @@ else
     echo >&2 "Default language code: $default_language_code_arg"
     echo >&2 "Folders levels to move: $default_folder_levels_arg"
     rename_files_to_dir $(get_files_by_ext "$starting_directory_arg" "$file_ext_arg")
+    echo "\nSummary:\n"
     echo "Files created:\n${files_created_list}"
     echo "Files skipped:\n${files_skipped_list}"
     exit 0
